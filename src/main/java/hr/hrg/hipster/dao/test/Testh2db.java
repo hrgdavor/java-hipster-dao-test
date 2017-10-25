@@ -20,19 +20,16 @@ public class Testh2db {
 		System.out.println("Starting ");
 		long start = System.currentTimeMillis();
 		
-		Class.forName("org.h2.Driver");
-		Connection conn = DriverManager.getConnection("jdbc:h2:mem:;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false");
+		Connection conn = makeTestConnection();		
+		createUserTable(conn);
 		
-		Statement statement = conn.createStatement();
-		statement.execute("CREATE TABLE user_table(user_id INT, name VARCHAR, age int)");
-		statement.execute("INSERT INTO user_table VALUES(1, 'Hello',11), (2, 'small,world',22), (3, 'big,world',33), (4, 'huge,world',44)");
         System.out.println(" created table in "+(System.currentTimeMillis()-start)+"ms");
 		
 
         ResultGetterSource getterSource = new ResultGetterSource();
         getterSource.registerFor(new StringListGetter(), List.class, String.class);
 
-        HipsterSql hipSql = new HipsterSql(new PreparedSetterSource(), new ReaderSource(getterSource));
+        HipsterSql hipSql = new HipsterSql(new PreparedSetterSource(), getterSource);
 
 		HipsterConnectionImpl hip = new HipsterConnectionImpl(hipSql, conn);
 
@@ -74,7 +71,7 @@ public class Testh2db {
 		
 		System.out.println();
 		System.out.println("where name like '%world%'  ...... column of Long using reader");
-        List<Long> longs = hip.column(Long.class,"select user_id from user_table WHERE name like ","%world%");
+        List<Long> longs = hip.column(Long.class,"select user_id from user_table WHERE ",UserEnum.name," like ","%world%");
         for(Long l: longs) System.out.println(l);
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
 
@@ -83,6 +80,18 @@ public class Testh2db {
 		String[] entityNamesPrefix = HipsterSqlUtil.entityNamesPrefixArray(UserInner.class);	
 		System.out.println(entityNamesPrefix[0]);
 		System.out.println(entityNamesPrefix[1]);
+	}
+
+	public static Connection makeTestConnection() throws ClassNotFoundException, SQLException {
+		Class.forName("org.h2.Driver");
+		Connection conn = DriverManager.getConnection("jdbc:h2:mem:;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false");
+		return conn;
+	}
+
+	public static void createUserTable(Connection conn) throws SQLException {
+		Statement statement = conn.createStatement();
+		statement.execute("CREATE TABLE user_table(user_id INT, name VARCHAR, age int)");
+		statement.execute("INSERT INTO user_table VALUES(1, 'Hello',11), (2, 'small,world',22), (3, 'big,world',33), (4, 'huge,world',44)");
 	}
 	
 	public static void printUsers(List<User> users) {
