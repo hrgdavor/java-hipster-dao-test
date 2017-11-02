@@ -35,19 +35,24 @@ public class Testh2dbVisitor {
 
 		System.out.println();
 		System.out.println("where name like '%world%'  ...... UserInner interface");
+
+		
 		Query query = new Query("select user_id, name, age from user_table WHERE name like ","%world%");
-		hip.rowsVisit(query, new UserVisitorSample() {	
-			@Override
-			public void visitUser(Long id, List<String> name, int age) {
-				System.out.print("User #"+id+" ");
-				if(name != null) for(String n:name){
-					System.out.print(n+", ");
-				}
-				System.out.println(" "+age);
-			}
+
+		hip.rowsVisit(query, (UserVisitor) (id, name, age) -> {
+			System.out.println("User #"+id+" "+name+" "+age);
 		});
-        //printUsersInner(hip.entities(UserInner.class,"from user_table WHERE name like ","%world%"));		
-		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
+
+	}
+
+	
+	public interface UserVisitor{
+
+		public void visitUser(
+				Long id, 
+				String name, 
+				int age);
 		
 	}
+	
 }
