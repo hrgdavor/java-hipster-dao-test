@@ -5,7 +5,7 @@ import java.util.*;
 
 import hr.hrg.hipster.sql.*;
 
-public class UserVisitorSampleHandler implements IResultVisitor<UserVisitorSample>{
+public class UserVisitorSampleHandler implements IResultFwdVisitor<UserVisitorSample>{
 
 	private IResultGetter<List<String>> _name_resultGetter;
 
