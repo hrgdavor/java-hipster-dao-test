@@ -39,7 +39,7 @@ public class Testh2db {
 
         EntityDao<User,Long> dao = new EntityDao<User, Long>(meta, hip);
 
-		printUsers(dao.byCriteria());
+		printUsers(dao.allByCriteria());
 
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
 
@@ -50,7 +50,7 @@ public class Testh2db {
 
 		System.out.println();
 		System.out.println("where id>2 order by id desc");
-        printUsers(dao.byCriteria("WHERE ",UserEnum.id, ">", 2, " order by ", UserEnum.id," desc"));
+        printUsers(dao.allByCriteria("WHERE ",UserEnum.id, ">", 2, " order by ", UserEnum.id," desc"));
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
         
 		System.out.println();
