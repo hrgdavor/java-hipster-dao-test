@@ -26,7 +26,7 @@ public class TestChange {
 		hub.addChangeListener(new IChangeListener<User, Long, UserEnum>() {
 
 			@Override
-			public void recordChanged(DataUpdate<User, Long, UserEnum> update, long batchId) {
+			public void recordChanged(EntityEvent<User, Long, UserEnum> update, long batchId) {
 				callCount.incrementAndGet();
 			}
 		}, User.class);
@@ -39,7 +39,7 @@ public class TestChange {
 		
 		UserImmutable newUser = new UserImmutable(update); 
 
-		hub.fireChange(new DataUpdate<User, Long, UserEnum>(1L, old, newUser, update, meta), 1l);
+		hub.fireChange(new EntityEvent<User, Long, UserEnum>(1L, old, newUser, update, meta), 1l);
 		
 		assertEquals(callCount.get(), 1);
 		
