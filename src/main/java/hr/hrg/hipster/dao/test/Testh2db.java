@@ -33,7 +33,7 @@ public class Testh2db {
 
 		HipsterConnectionImpl hip = new HipsterConnectionImpl(hipSql, conn);
 
-		UserMeta meta = new UserMeta(getterSource);
+		UserMeta meta = new UserMeta(getterSource,0);
         
 		System.out.println(" prepared hipster "+(System.currentTimeMillis()-start)+"ms");
 
@@ -55,7 +55,7 @@ public class Testh2db {
         
 		System.out.println();
 		System.out.println("where name like '%world%'  ...... UserInnerMeta");
-		UserInnerMeta userInnerMeta = new UserInnerMeta(getterSource);
+		UserInnerMeta userInnerMeta = new UserInnerMeta(getterSource,1);
         printUsersInner(hip.entities(userInnerMeta,"from user_table WHERE ",UserInnerEnum.name," like ","%world%"));		
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
 		

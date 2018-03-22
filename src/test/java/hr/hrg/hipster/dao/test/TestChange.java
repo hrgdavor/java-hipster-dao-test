@@ -12,6 +12,7 @@ import java.util.concurrent.atomic.*;
 @Test
 public class TestChange {
 
+	@Test(enabled=false)
 	public static void main(String[] args) {
 		new TestChange().testChangeListenerCall();
 	}
@@ -23,23 +24,23 @@ public class TestChange {
 
 		final AtomicInteger callCount = new AtomicInteger();
 		
-		hub.addChangeListener(new IChangeListener<User, Long, UserEnum>() {
+		hub.addChangeListener(new IChangeListener<User1, Long, BaseColumnMeta<?>>() {
 
 			@Override
-			public void recordChanged(EntityEvent<User, Long, UserEnum> update, long batchId) {
+			public void recordChanged(EntityEvent<User1, Long, BaseColumnMeta<?>> update, long batchId) {
 				callCount.incrementAndGet();
 			}
-		}, User.class);
+		}, User1.class);
 		
-		User old = new UserImmutable(1L, ImmutableList.safe("name"), 22);
+		User1 old = new User1Immutable(1L, ImmutableList.safe("name"), 22);
 		
-		UserUpdate update = new UserUpdate(old);
+		User1Update update = new User1Update(old);
 		update.age(33);
-		UserMeta meta = new UserMeta(new ResultGetterSource());
+		User1Meta meta = new User1Meta(new ResultGetterSource(),0);
 		
-		UserImmutable newUser = new UserImmutable(update); 
+		User1Immutable newUser = new User1Immutable(update); 
 
-		hub.fireChange(new EntityEvent<User, Long, UserEnum>(1L, old, newUser, update, meta), 1l);
+		hub.fireChange(new EntityEvent<User1, Long, BaseColumnMeta<?>>(1L, old, newUser, update, meta), 1l);
 		
 		assertEquals(callCount.get(), 1);
 		

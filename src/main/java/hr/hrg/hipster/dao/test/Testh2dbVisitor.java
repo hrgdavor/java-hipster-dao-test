@@ -40,7 +40,7 @@ public class Testh2dbVisitor {
 		Query query = new Query("select user_id, name, age from user_table WHERE name like ","%world%");
 
 		hip.rowsVisit(query, (UserVisitor) (id, name, age) -> {
-			System.out.println("User #"+id+" "+name+" "+age);
+			System.out.println("User1 #"+id+" "+name+" "+age);
 		});
 
 	}
