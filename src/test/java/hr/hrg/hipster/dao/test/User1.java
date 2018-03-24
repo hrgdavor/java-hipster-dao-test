@@ -10,7 +10,7 @@ import hr.hrg.hipster.sql.*;
 @HipsterEntity(table="user_table")
 @HipsterVisitor
 public interface User1{
-	
+
 	@Id
 	@Column(name="user_id")
 	public Long getId();

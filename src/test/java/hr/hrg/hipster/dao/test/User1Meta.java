@@ -1,26 +1,25 @@
 package hr.hrg.hipster.dao.test;
 
-import hr.hrg.hipster.BaseEntityMeta;
-import hr.hrg.hipster.sql.BaseColumnMeta;
-import hr.hrg.hipster.sql.IResultGetter;
-import hr.hrg.hipster.sql.ImmutableList;
-import hr.hrg.hipster.sql.ResultGetterSource;
-import java.lang.Class;
-import java.lang.Long;
-import java.lang.Object;
-import java.lang.Override;
-import java.lang.String;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
+import hr.hrg.hipster.BaseEntityMeta;
+import hr.hrg.hipster.sql.BaseColumnMeta;
+import hr.hrg.hipster.sql.IPreparedSetter;
+import hr.hrg.hipster.sql.IResultGetter;
+import hr.hrg.hipster.sql.ImmutableList;
+import hr.hrg.hipster.sql.PreparedSetterSource;
+import hr.hrg.hipster.sql.ResultGetterSource;
+
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 
 	private static final Class<User1> ENTITY_CLASS = User1.class;
 	private static final String TABLE_NAME = "user_table";
 
-	public static final BaseColumnMeta<Long> id = new BaseColumnMeta<Long>(0,"user_id","id","getId",ENTITY_CLASS,Long.class,null,TABLE_NAME,"");
+	public static final BaseColumnMeta<Long> id = new BaseColumnMeta<Long>(0,"id","user_id","getId",ENTITY_CLASS,Long.class,null,TABLE_NAME,"");
 	public static final BaseColumnMeta<List> name = new BaseColumnMeta<>(1,"name","name","getName",ENTITY_CLASS,List.class,null,TABLE_NAME,"",String.class);
 	public static final BaseColumnMeta<Integer> age  = new BaseColumnMeta<Integer>(2,"age","age","getAge",ENTITY_CLASS,Integer.class,int.class,TABLE_NAME,"");
 		
@@ -49,16 +48,29 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 	}
 */
 	
-	public final IResultGetter<List<String>> _name_resultGetter;
+//	public final IResultGetter<List<String>> _name_resultGetter;
 
-	public User1Meta(ResultGetterSource getterSource, int ordinal) {
-		super(ordinal);
-		_name_resultGetter = getterSource == null ? null : (IResultGetter<List<String>>) getterSource.getFor(List.class, String.class);
+	public User1Meta(ResultGetterSource getterSource, PreparedSetterSource setterSource, int ordinal) {
+		super(ordinal, TABLE_NAME,3);
+		
+		if(setterSource != null) {
+			// can not be static, as it requires info from runtime
+			_preparedSetter[1] = (IPreparedSetter) setterSource.getFor(List.class, String.class); // name
+		}
+		
+		if(getterSource != null) {
+			// can not be static, as it requires info from runtime
+			_resultGetter[1] = (IResultGetter) getterSource.getFor(List.class, String.class); // name
+		}
+		
+
+//		_name_resultGetter = getterSource == null ? null : (IResultGetter<List<String>>) getterSource.getFor(List.class, String.class);
 	}
 
   public final User1 fromResultSet(ResultSet rs) throws SQLException {
     Long id = rs.getLong(1);
-    List<String> name = (List<String>)_name_resultGetter.get(rs,2);
+    List<String> name = (List<String>)_resultGetter[1].get(rs,2);
+//    List<String> name = (List<String>)_name_resultGetter.get(rs,2);
     int age = rs.getInt(3);
 
     return new User1Immutable(
@@ -77,11 +89,6 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
   @Override
   public final String getEntityName() {
     return "User1";
-  }
-
-  @Override
-  public final String getTableName() {
-    return TABLE_NAME;
   }
 
   @Override
