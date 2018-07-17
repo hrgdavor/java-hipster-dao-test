@@ -22,10 +22,10 @@ public class Testh2dbVisitor {
         System.out.println(" created table in "+(System.currentTimeMillis()-start)+"ms");
 		
 
-        ResultGetterSource getterSource = new ResultGetterSource();
-        getterSource.registerFor(new StringListGetter(), List.class, String.class);
+        TypeSource typeSource = new TypeSource();
+        typeSource.registerFor(new StringListGetter(), List.class, String.class);
 
-        HipsterSql hipSql = new HipsterSql(new PreparedSetterSource(), getterSource);
+        HipsterSql hipSql = new HipsterSql(typeSource);
 
 //        hipSql.getVisitorSource().registerFor(new UserVisitorSampleHandler(getterSource), UserVisitorSample.class);
         

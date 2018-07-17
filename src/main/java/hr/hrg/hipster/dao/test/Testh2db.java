@@ -26,15 +26,15 @@ public class Testh2db {
         System.out.println(" created table in "+(System.currentTimeMillis()-start)+"ms");
 		
 
-        ResultGetterSource getterSource = new ResultGetterSource();
+        TypeSource getterSource = new TypeSource();
         getterSource.registerFor(new StringListGetter(), List.class, String.class);
 
-        HipsterSql hipSql = new HipsterSql(new PreparedSetterSource(), getterSource);
+        HipsterSql hipSql = new HipsterSql(getterSource);
 
 		HipsterConnectionImpl hip = new HipsterConnectionImpl(hipSql, conn);
 
-		UserMeta meta = new UserMeta(getterSource,0);
-        
+		UserMeta meta = new UserMeta(getterSource, 0);
+
 		System.out.println(" prepared hipster "+(System.currentTimeMillis()-start)+"ms");
 
         EntityDao<User,Long> dao = new EntityDao<User, Long>(meta, hip);
@@ -50,13 +50,13 @@ public class Testh2db {
 
 		System.out.println();
 		System.out.println("where id>2 order by id desc");
-        printUsers(dao.allByCriteria("WHERE ",UserEnum.id, ">", 2, " order by ", UserEnum.id," desc"));
+        printUsers(dao.allByCriteria("WHERE ",UserMeta.id, ">", 2, " order by ", UserMeta.id," desc"));
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
         
 		System.out.println();
 		System.out.println("where name like '%world%'  ...... UserInnerMeta");
-		UserInnerMeta userInnerMeta = new UserInnerMeta(getterSource,1);
-        printUsersInner(hip.entities(userInnerMeta,"from user_table WHERE ",UserInnerEnum.name," like ","%world%"));		
+		UserInnerMeta userInnerMeta = new UserInnerMeta(getterSource, 1);
+        printUsersInner(hip.entities(userInnerMeta,"from user_table WHERE ",UserInnerMeta.name," like ","%world%"));		
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
 		
 		System.out.println();
@@ -71,7 +71,7 @@ public class Testh2db {
 		
 		System.out.println();
 		System.out.println("where name like '%world%'  ...... column of Long using reader");
-        List<Long> longs = hip.column(Long.class,"select user_id from user_table WHERE ",UserEnum.name," like ","%world%");
+        List<Long> longs = hip.column(Long.class,"select user_id from user_table WHERE ",UserMeta.name," like ","%world%");
         for(Long l: longs) System.out.println(l);
 		System.out.println(" printed results in "+(System.currentTimeMillis()-start)+"ms");		
 

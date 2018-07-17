@@ -7,11 +7,11 @@ import hr.hrg.hipster.sql.*;
 
 public class UserVisitorSampleHandler implements IResultFwdVisitor<UserVisitorSample>{
 
-	private IResultGetter<List<String>> _name_resultGetter;
+	private ICustomType<List<String>> _name_resultGetter;
 
 	@SuppressWarnings("unchecked")
-	public UserVisitorSampleHandler(ResultGetterSource getterSource) {
-	    _name_resultGetter = (IResultGetter<List<String>>) getterSource.getFor(List.class,String.class);
+	public UserVisitorSampleHandler(TypeSource getterSource) {
+	    _name_resultGetter = (ICustomType<List<String>>) getterSource.getFor(List.class,String.class);
 	}
 	
 	public void visitResult(ResultSet rs, UserVisitorSample visitor) throws SQLException{

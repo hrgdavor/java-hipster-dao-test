@@ -5,19 +5,15 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import hr.hrg.hipster.BaseEntityMeta;
-import hr.hrg.hipster.sql.BaseColumnMeta;
-import hr.hrg.hipster.sql.IPreparedSetter;
-import hr.hrg.hipster.sql.IResultGetter;
-import hr.hrg.hipster.sql.ImmutableList;
-import hr.hrg.hipster.sql.PreparedSetterSource;
-import hr.hrg.hipster.sql.ResultGetterSource;
+import hr.hrg.hipster.sql.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 
 	private static final Class<User1> ENTITY_CLASS = User1.class;
+
 	private static final String TABLE_NAME = "user_table";
+	private static final QueryLiteral TABLE= new QueryLiteral(TABLE_NAME, true);
 
 	public static final BaseColumnMeta<Long> id = new BaseColumnMeta<Long>(0,"id","user_id","getId",ENTITY_CLASS,Long.class,null,TABLE_NAME,"");
 	public static final BaseColumnMeta<List> name = new BaseColumnMeta<>(1,"name","name","getName",ENTITY_CLASS,List.class,null,TABLE_NAME,"",String.class);
@@ -29,7 +25,7 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 	
 	private static final BaseColumnMeta<?>[] COLUMN_ARRAY = {id,name,age};
 	
-	private static final ImmutableList<BaseColumnMeta<?>> COLUMNS = ImmutableList.safe(COLUMN_ARRAY);
+	public static final ImmutableList<BaseColumnMeta<?>> COLUMNS = ImmutableList.safe(COLUMN_ARRAY);
 	
 	private static final BaseColumnMeta<?>[] COLUMN_ARRAY_SORTED = {age,id,name};
 	
@@ -50,17 +46,12 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 	
 //	public final IResultGetter<List<String>> _name_resultGetter;
 
-	public User1Meta(ResultGetterSource getterSource, PreparedSetterSource setterSource, int ordinal) {
-		super(ordinal, TABLE_NAME,3);
-		
-		if(setterSource != null) {
-			// can not be static, as it requires info from runtime
-			_preparedSetter[1] = (IPreparedSetter) setterSource.getFor(List.class, String.class); // name
-		}
-		
+	public User1Meta(TypeSource getterSource, int ordinal) {
+		super(ordinal, TABLE_NAME, TABLE,COLUMN_ARRAY, COLUMN_ARRAY_SORTED_STR, COLUMN_ARRAY_SORTED);
+				
 		if(getterSource != null) {
 			// can not be static, as it requires info from runtime
-			_resultGetter[1] = (IResultGetter) getterSource.getFor(List.class, String.class); // name
+			_typeHandler[1] = (ICustomType) getterSource.getFor(List.class, String.class); // name
 		}
 		
 
@@ -69,7 +60,7 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 
   public final User1 fromResultSet(ResultSet rs) throws SQLException {
     Long id = rs.getLong(1);
-    List<String> name = (List<String>)_resultGetter[1].get(rs,2);
+    List<String> name = (List<String>)_typeHandler[1].get(rs,2);
 //    List<String> name = (List<String>)_name_resultGetter.get(rs,2);
     int age = rs.getInt(3);
 
@@ -117,17 +108,6 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
   @Override
   public final BaseColumnMeta<?> getPrimaryColumn() {
     return id;
-  }
-
-  @Override
-  public final BaseColumnMeta<?> getColumn(String columnName) {
-    int pos = Arrays.binarySearch(COLUMN_ARRAY_SORTED_STR, columnName);
-    return pos == -1 ? null: COLUMN_ARRAY_SORTED[pos];
-  }
-
-  @Override
-  public final BaseColumnMeta<?> getColumn(int ordinal) {
-    return COLUMN_ARRAY[ordinal];
   }
 
   @Override

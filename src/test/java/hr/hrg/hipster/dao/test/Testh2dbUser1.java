@@ -1,16 +1,10 @@
 package hr.hrg.hipster.dao.test;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.List;
+import java.sql.*;
+import java.util.*;
 
-import hr.hrg.hipster.dao.EntityDao;
-import hr.hrg.hipster.sql.HipsterConnectionImpl;
-import hr.hrg.hipster.sql.HipsterSql;
-import hr.hrg.hipster.sql.PreparedSetterSource;
-import hr.hrg.hipster.sql.ResultGetterSource;
+import hr.hrg.hipster.dao.*;
+import hr.hrg.hipster.sql.*;
 
 public class Testh2dbUser1 {
 	static {
@@ -29,14 +23,14 @@ public class Testh2dbUser1 {
         System.out.println(" created table in "+(System.currentTimeMillis()-start)+"ms");
 		
 
-        ResultGetterSource getterSource = new ResultGetterSource();
-        getterSource.registerFor(new StringListGetter(), List.class, String.class);
+        TypeSource typeSource = new TypeSource();
+        typeSource.registerFor(new StringListGetter(), List.class, String.class);
 
-        HipsterSql hipSql = new HipsterSql(new PreparedSetterSource(), getterSource);
+        HipsterSql hipSql = new HipsterSql(typeSource);
 
 		HipsterConnectionImpl hip = new HipsterConnectionImpl(hipSql, conn);
 
-		User1Meta meta = new User1Meta(getterSource, new PreparedSetterSource(),0);
+		User1Meta meta = new User1Meta(typeSource, 0);
         
 		System.out.println(" prepared hipster "+(System.currentTimeMillis()-start)+"ms");
 

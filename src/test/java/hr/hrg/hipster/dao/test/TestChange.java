@@ -36,7 +36,7 @@ public class TestChange {
 		
 		User1Update update = new User1Update(old);
 		update.age(33);
-		User1Meta meta = new User1Meta(new ResultGetterSource(), new PreparedSetterSource(),0);
+		User1Meta meta = new User1Meta(new TypeSource(), 0);
 		
 		User1Immutable newUser = new User1Immutable(update); 
 
