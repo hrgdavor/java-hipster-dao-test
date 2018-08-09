@@ -1,5 +1,6 @@
 .settings/
 target/
+bin/
 test-output/
 .classpath
 .readme.md.html
