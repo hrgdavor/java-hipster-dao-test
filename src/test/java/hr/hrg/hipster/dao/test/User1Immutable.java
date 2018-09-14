@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import hr.hrg.hipster.dao.IEnumGetter;
 import hr.hrg.hipster.dao.jackson.DirectSerializer;
 import hr.hrg.hipster.dao.jackson.IDirectSerializerReady;
-import hr.hrg.hipster.sql.BaseColumnMeta;
+import hr.hrg.hipster.sql.*;
 
 import java.io.IOException;
 import java.lang.Long;
@@ -21,7 +21,7 @@ import java.util.List;
 @JsonSerialize(
     using = DirectSerializer.class
 )
-public final class User1Immutable implements User1, IEnumGetter<BaseColumnMeta<?>>, IDirectSerializerReady {
+public final class User1Immutable implements User1, IEnumGetter, IDirectSerializerReady {
   private final Long id;
 
   private final List<String> name;
@@ -58,8 +58,8 @@ public final class User1Immutable implements User1, IEnumGetter<BaseColumnMeta<?
   }
 
   @Override
-  public final Object getValue(BaseColumnMeta<?> column) {
-    return this.getValue(column.ordinal());
+  public<T,E extends Key<T>> T getValue(E column) {
+    return (T) this.getValue(column.ordinal());
   }
 
   @Override

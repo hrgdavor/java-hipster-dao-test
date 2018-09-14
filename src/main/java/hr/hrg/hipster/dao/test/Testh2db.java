@@ -37,7 +37,7 @@ public class Testh2db {
 
 		System.out.println(" prepared hipster "+(System.currentTimeMillis()-start)+"ms");
 
-        EntityDao<User,Long> dao = new EntityDao<User, Long>(meta, hip);
+        EntityDao<User,Long, BaseColumnMeta, UserMeta> dao = new EntityDao<User, Long, BaseColumnMeta, UserMeta>(meta, hip);
 
 		printUsers(dao.allByCriteria());
 

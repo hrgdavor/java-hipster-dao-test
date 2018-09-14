@@ -8,7 +8,7 @@ import java.util.List;
 import hr.hrg.hipster.sql.*;
 
 @SuppressWarnings({"rawtypes", "unchecked"})
-public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
+public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta> {
 
 	private static final Class<User1> ENTITY_CLASS = User1.class;
 
@@ -23,11 +23,11 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
 	
 	private static final ImmutableList<String> COLUMN_NAMES = ImmutableList.safe("user_id","name","age");
 	
-	private static final BaseColumnMeta<?>[] COLUMN_ARRAY = {id,name,age};
+	private static final BaseColumnMeta[] COLUMN_ARRAY = {id,name,age};
 	
-	public static final ImmutableList<BaseColumnMeta<?>> COLUMNS = ImmutableList.safe(COLUMN_ARRAY);
+	public static final ImmutableList<BaseColumnMeta> COLUMNS = ImmutableList.safe(COLUMN_ARRAY);
 	
-	private static final BaseColumnMeta<?>[] COLUMN_ARRAY_SORTED = {age,id,name};
+	private static final BaseColumnMeta[] COLUMN_ARRAY_SORTED = {age,id,name};
 	
 	private static final String[] COLUMN_ARRAY_SORTED_STR = {"age","id","name"};
   
@@ -101,12 +101,12 @@ public class User1Meta extends BaseEntityMeta<User1, Long, BaseColumnMeta<?>> {
   }
 
   @Override
-  public final List<BaseColumnMeta<?>> getColumns() {
+  public final List<BaseColumnMeta> getColumns() {
     return COLUMNS;
   }
 
   @Override
-  public final BaseColumnMeta<?> getPrimaryColumn() {
+  public final BaseColumnMeta getPrimaryColumn() {
     return id;
   }
 

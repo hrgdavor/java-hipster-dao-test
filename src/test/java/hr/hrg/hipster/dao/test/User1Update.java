@@ -9,7 +9,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import hr.hrg.hipster.dao.IUpdatable;
 import hr.hrg.hipster.dao.jackson.DirectSerializer;
 import hr.hrg.hipster.dao.jackson.IDirectSerializerReady;
-import hr.hrg.hipster.sql.BaseColumnMeta;
+import hr.hrg.hipster.sql.*;
 
 import java.io.IOException;
 import java.lang.Integer;
@@ -22,7 +22,7 @@ import java.util.List;
 @JsonSerialize(
     using = DirectSerializer.class
 )
-public class User1Update implements User1, IUpdatable<BaseColumnMeta<?>>, IDirectSerializerReady {
+public class User1Update implements User1, IUpdatable, IDirectSerializerReady {
   protected long _changeSet;
 
   protected Long id;
@@ -80,13 +80,13 @@ public class User1Update implements User1, IUpdatable<BaseColumnMeta<?>>, IDirec
   }
 
   @Override
-  public void setValue(BaseColumnMeta<?> column, Object value) {
+  public<T> void setValue(Key<T> column, T value) {
     this.setValue(column.ordinal(), value);
   }
 
   @Override
-  public final Object getValue(BaseColumnMeta<?> column) {
-    return this.getValue(column.ordinal());
+  public<T,E extends Key<T>> T getValue(E column) {
+    return (T) this.getValue(column.ordinal());
   }
 
   @Override
@@ -138,7 +138,7 @@ public class User1Update implements User1, IUpdatable<BaseColumnMeta<?>>, IDirec
   }
 
   @Override
-  public boolean isChanged(BaseColumnMeta<?> column) {
+  public <T> boolean isChanged(Key<T> column) {
     return (_changeSet & (1L << column.ordinal())) != 0;
   }
 
@@ -146,4 +146,23 @@ public class User1Update implements User1, IUpdatable<BaseColumnMeta<?>>, IDirec
   public boolean isChanged(int ordinal) {
     return (_changeSet & (1L << ordinal)) != 0;
   }
+
+	@Override
+	public <T> void setChanged(Key<T> column, boolean changed) {
+		setChanged(column.ordinal(), changed);
+	}
+	
+	@Override
+	public void setChanged(int ordinal, boolean changed) {
+		if(changed) {
+		    this._changeSet |= (1L<<ordinal);			
+		}else {
+		    this._changeSet &= ~(1L<<ordinal);			
+		}
+	}
+	
+	@Override
+	public void setChanged(boolean change) {
+		_changeSet = change ? 7:0; // ( (1 << COLUMN_COUNT) -1 )
+	}
 }

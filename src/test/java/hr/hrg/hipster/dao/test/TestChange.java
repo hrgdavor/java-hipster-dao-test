@@ -1,13 +1,13 @@
 package hr.hrg.hipster.dao.test;
 
+import static org.testng.Assert.*;
+
+import java.util.concurrent.atomic.*;
+
 import org.testng.annotations.*;
 
 import hr.hrg.hipster.dao.change.*;
 import hr.hrg.hipster.sql.*;
-
-import static org.testng.Assert.*;
-
-import java.util.concurrent.atomic.*;
 
 @Test
 public class TestChange {
@@ -40,7 +40,7 @@ public class TestChange {
 		
 		User1Immutable newUser = new User1Immutable(update); 
 
-		hub.fireChange(new EntityEvent<User1, Long, BaseColumnMeta<?>>(1L, old, newUser, update, meta), 1l);
+		hub.fireChange(new EntityEvent<User1, Long, BaseColumnMeta>(1L, old, newUser, update, meta), 1l);
 		
 		assertEquals(callCount.get(), 1);
 		
