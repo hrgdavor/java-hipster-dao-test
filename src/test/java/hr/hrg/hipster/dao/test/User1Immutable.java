@@ -72,6 +72,13 @@ public final class User1Immutable implements User1, IEnumGetter, IDirectSerializ
     }
   }
 
+  @Override
+	public boolean equals(Object o) {
+	  	if(o == null || !(o instanceof User1)) return false;
+	  	return id.equals(((User1)o).getId());
+//		return id == ((User1)o).getId();
+	}
+  
   public void serialize(JsonGenerator jgen, SerializerProvider provider) throws IOException,
       JsonGenerationException {
     jgen.writeStartObject();
