@@ -26,10 +26,11 @@ public class Testh2db {
         System.out.println(" created table in "+(System.currentTimeMillis()-start)+"ms");
 		
 
-        TypeSource getterSource = new TypeSource();
+        HipsterSql hipSql = new HipsterSql();
+        TypeSource getterSource = hipSql.getTypeSource();
+        
         getterSource.registerFor(new StringListGetter(), List.class, String.class);
 
-        HipsterSql hipSql = new HipsterSql(getterSource);
 
 		HipsterConnectionImpl hip = new HipsterConnectionImpl(hipSql, conn);
 
